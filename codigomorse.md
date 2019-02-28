@@ -2,12 +2,16 @@
 
 CÓDIGO MORSE
 Descripción breve del proyecto a realizar (2-3 frases).
-
+Traductor de código morse. Consiste en leer de un fichero o introducir un mensaje y registrar si éste es de peligro o no. Si fuera de peligro se encendería un led rojo, por el contrario , se encendería uno verde. La traducción se realizará mediante LEDS. Un punto equivaldrá a un led de iluminación corta, y una raya equivaldrá a un led de iluminación larga. Además, los puntos y las rayas se emitirán por una bocina.
 
 ## Integrantes del equipo
 
-Nombres, apellidos, y usuario GitHub de los integrantes del equipo.
+Stella Moral Salguero ( stellamoralsalguero)
+Marta Vinader Vega (mvinader)
+Andrea Calleja Pedrote (andreacallejapedrote)
 
 ## Objetivos del trabajo
 
-Lista de los objetivos que se persiguen con el trabajo propuesto.
+Distinguir un mensaje de peligro. 
+Traducir código morse. 
+Reproducir código morse a través de una bocina y LEDS.
