@@ -1,6 +1,6 @@
 # Título del trabajo
 
-TRADUCTOR CÓDIGO MORSE\n
+TRADUCTOR CÓDIGO MORSE.
 Consiste en leer de un fichero o introducir un mensaje y registrar si éste es de peligro o no. Si fuera de peligro se encendería un led rojo, por el contrario , se encendería uno verde. La traducción se realizará mediante LEDS. Un punto equivaldrá a un led de iluminación corta, y una raya equivaldrá a un led de iluminación larga. Además, los puntos y las rayas se emitirán por una bocina.
 
 ## Integrantes del equipo
