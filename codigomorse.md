@@ -14,3 +14,8 @@ Andrea Calleja Pedrote (@andreacallejapedrote)
 Distinguir un mensaje de peligro. 
 Traducir código morse. 
 Reproducir código morse a través de una bocina y LEDS.
+
+##Sensores y actuadores que vamos añadir.
+LED ROJO Y VERDE. 
+BOCINA.
+ARDUINO.
