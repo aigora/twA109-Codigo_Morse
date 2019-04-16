@@ -4,36 +4,37 @@
 #include <string.h>
 #define N 100
 
-void imprimir(char *); //ojo
-int menu(void);
-int mensaje(void);
-char mayusculas(char);
+void imprimir(char *); //FUNCIÓN PARA IMPRIMIR POR PANTALLA EL CODIGO MORSE 
+int menu(void); // FUNCIÓN PARA IMPLEMENTAR SI ES UN MENSAJE DE SOCORRO O NO.
+int mensaje(void); //FUNCIÓN PARA INTRODUCIR EL MENSAJE 
+char mayusculas(char); // FUNCION PARA QUE , EN CASO DE UNA MAYUSCULA SE CONVIERTA A MINUSCULA.
 
 int main()
 {
 	char cad[N], *pcad, minus;
 	pcad = cad;
-	char opcion;
+	char opcion,letra;
 	opcion=menu(void);
 	do {
 		while (opcion != 'a' || opcion != 'b')
 		{
 			printf("Ha marcado una letra incorrecta");
-			opcion=menu(void);//Llamar a función de menú de nuevo para pedir la letra.
+			opcion=menu(void);//Llamar a función de menú de nuevo para pedir la opción.
 		}
 		if (opcion == 'a')
 		{
-			cad=mensaje(void);
+			cad[N]=mensaje(void);
 			while (*pcad = '\0')
 			{
 				if (*pcad < 33  || (*pcad > 34 && *pcad < 44) || (*pcad > 44 && *pcad < 48) || (*pcad > 57 && *pcad < 63) || (*pcad > 63 && *pcad <65) || *pcad > 122)
 				{
 					printf("Algun caracter de los que ha introducido no es correcto.\n");
-					cad=mensaje(void); // hay algun caracter incorrecto , llama a la funcion otra vez 
+					cad[N]=mensaje(void); // hay algun caracter incorrecto , llama a la función para introducir el mensaje otra vez 
 				}
 				else if(*pcad>64 && *pcad<91) //para pasar de mayusculas a minusculas 
 				{
-					minus=mayusculas(cad);
+					minus=mayusculas(letra); // llamada a la funcion
+					imprimir(&cad); // imprimir la letra en minuscula  
 				}
 				pcad++;
 			}
@@ -49,7 +50,7 @@ int main()
 				if (*pcad < 33  || (*pcad > 34 && *pcad < 44) || (*pcad > 44 && *pcad < 48) || (*pcad > 57 && *pcad < 63) || (*pcad > 63 && *pcad < 97) || *pcad > 122)
 				{
 					printf("Algun caracter de los que ha introducido no es correcto.\n");
-					cad=mensaje(void); // hay algun caracter incorrecto , llama a la funcion otra vez 
+					cad[N]=mensaje(void); // hay algun caracter incorrecto , llama a la funcion otra vez 
 				}
 				pcad++;
 			}
@@ -64,7 +65,7 @@ int main()
 	system("pause");
 }
 
-int menu(void)
+char menu(void)
 {
 	int opcion;
 	printf("Indique el motivo de su mensaje. Pulse la letra a si es un mensaje de alerta o socorro, o la letra b si es cualquier otro tipo de mensaje: ");
@@ -72,18 +73,18 @@ int menu(void)
 	scanf_s("%c", &opcion);
 	return (opcion);
 }
-int mensaje(void)
+char mensaje(void)
 {
-	char cad;
+	char cad[N];
 	printf("Introduzca su mensaje (todo en minusculas). Puedes introducir numeros, espacios, comas, ?, "" y puntos si lo desea: ");
 	gets_s(cad);
-	return cad;
+	return (cad[N]);
 }
 char mayusculas(char letra)
 {
-	char a;
-	a=letra+32;
-	return a;
+	char salida;
+	salida= 'a'+ letra-'A';
+	return salida;
 	
 }
 
