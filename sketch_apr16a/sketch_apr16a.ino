@@ -1,10 +1,24 @@
-unsigned short int punto = 70; // Duracion del punto
-unsigned short int raya = punto * 4; // Duracion de la raya
-unsigned short int negro = punto * 3; // Duracion del apagado entre rayas y puntos
-unsigned short int letrayletra = punto * 5; // Duracion del apagado entre letras
-void playTone(int tone, int duration, int speakerPin) {
- // envia la señal al speakerPin (altavoz)
- for (long i = 0; i < duration * 1000L; i += tone * 2) {
+/*
+* El circuito consta de un buzzer
+* conectado al pin 13 que como se sabe tiene puesta una 
+* resistencia para controlar el consumo del pin. El buzzer permite
+* oir el sonido de los dot y dash que genere el mensaje que insertemos 
+* por el monitor serial (teclado), para obtener una señal óptica, conectamos 
+* un LED en el mismo pin 13. Para obtener mayor potencia utilizamos un 
+* transistor en la salida.
+* Este código básicamente lo que hace es recibir caracteres por el 
+* puerto COM y los reproduce (luz, sonido o luz + sonido)
+*/
+
+unsigned short int punto = 70; //Duración del punto
+unsigned short int raya = punto * 4; //Duración de la raya
+unsigned short int negro = punto * 3; //Duración del apagado entre rayas y puntos
+unsigned short int letrayletra = punto * 5; //Duración del apagado entre letras
+
+void playTone(int tone, int duration, int speakerPin)  //Envía la señal al speakerPin (altavoz)
+{
+ for (long i = 0; i < duration * 1000L; i += tone * 2)
+ {
    digitalWrite(speakerPin, HIGH);
    delayMicroseconds(tone);
    digitalWrite(speakerPin, LOW);
@@ -12,25 +26,134 @@ void playTone(int tone, int duration, int speakerPin) {
  }
 }
 
-void playToneLed(int tone, int duration, int speakerPin, int ledPin) {
- // envia la señal al altavoz y al led.
- for (long i = 0; i < duration * 1000L; i += tone * 2) {
-   digitalWrite(speakerPin, HIGH);
+void playToneLed(int tone, int duration, int speakerPin, int ledPin) //Envia la señal al altavoz y al LED.
+{
+ for (long i = 0; i < duration * 1000L; i += tone * 2)
+ {
+   digitalWrite(speakerPin, HIGH); //(pin, valor(HIGH o LOW))
    digitalWrite(ledPin, HIGH);
-   delayMicroseconds(tone);
+   delayMicroseconds(tone); //Pausa el programa el tiempo (en microsegundos) especficado
    digitalWrite(speakerPin, LOW);
    digitalWrite(ledPin, LOW);
    delayMicroseconds(tone);
  }
 }
 
+/* ########## TIPOS DE LETRA #########
+ *  creamos una libreria
+ *  class: una clase es una colección de funciones y variables que se mantienen juntas en un solo lugar, pueden ser :
+ *   públicas: lo que significa que pueden acceder a ellas las personas que utilizan su biblioteca.
+ *   privadas: lo que significa que solo se puede acceder desde la propia clase.
+ */
 
-void setup() {
+class letra
+{
+  private:
+    char caracter;
+    char* codigo;
+    int ledPin;
+  public:
+    letra (char car, char* cad, unsigned short int pin);
+    void set (char car, char* cad, unsigned short int pin);
+    void mostrar();
+    void sonar();
+    void mostrarYsonar();
+};
+
+letra::letra (char car, char* cad, unsigned short int pin) {
+ /* Constructor: cada clase tiene una función especial conocida como constructor,que se usa para crear una instancia de la clase. 
+  * El constructor tiene el mismo nombre que la clase y ningún tipo de devolución.*/
+  caracter = car;
+  codigo = cad;
+  ledPin = pin;
+  pinMode(ledPin, OUTPUT);
+}
+
+void letra::set (char car, char* cad, unsigned short int pin) // Setter
+{ 
+ caracter = car;
+ codigo = cad;
+ ledPin = pin;
+}
+
+//¿Por qué hacer funciones de sonar y mostrar si ya hay una función que es sonarymostrar a la vez?
+
+/*void letra::mostrar () //Enseña el código en el ledPin
+{
+  unsigned short int j = 0;
+  while (codigo[j] != 0)
+  {
+   if (codigo[j] == '.')
+   {
+     digitalWrite (ledPin, HIGH);
+     lcd.setCursor(1,2);
+     lcd.print(codigo[j]);  
+     delay (punto);
+     digitalWrite (ledPin, LOW);
+     delay (negro);
+   }
+   else if (codigo[j] == '-')
+   {
+    digitalWrite (ledPin, HIGH);
+    lcd.setCursor(2,2);
+    lcd.print(codigo[j]);
+    delay (raya);
+    digitalWrite (ledPin, LOW);
+    delay (negro);
+   }
+    j++;
+  }
+  delay (letrayletra);
+}*/
+
+/*void letra::sonar () //Hace sonar el código en el speakerPin
+{ 
+  unsigned short int j = 0;
+  while (codigo[j] != 0)
+  {
+   if (codigo[j] == '.')
+   {
+     playTone (440, 100, 9);
+     delay (negro/3);
+    }
+    else if (codigo[j] == '-')
+    {
+      playTone (440, 100 * 4, 9);
+      delay (negro/3);
+    }
+    j++;
+  }
+  delay (letrayletra);
+}*/
+
+void letra::mostrarYsonar () // Hace sonar y enseña el código (ledPin + speakerPin)
+{ 
+  unsigned short int j = 0;
+  while (codigo[j] != 0)
+  {
+   if (codigo[j] == '.')
+   {
+    playToneLed (440, 100, 9, ledPin); //(frecuencia del tono(Hz) , duración, pin salida, )
+    delay (negro/4); // delay: para el programa por unos segundos 
+   }
+   else if (codigo[j] == '-')
+   {
+    playToneLed (440, 100 * 4, 9, ledPin);
+    delay (negro/4); //delay (100)
+   }
+    j++;
+  }
+  delay (letrayletra/2);
+}
+
+void setup()
+{
   Serial.begin(9600);
   pinMode(9,OUTPUT); 
-  
-
 }
+
+int letraIN = 0;
+unsigned short int ledPin = 13;
 
 void loop() {
 
@@ -51,7 +174,7 @@ void loop() {
 
     let.set ('a', ".-", ledPin);
 
-    lcd.print("a .- "); //¿Esto es para imprimir en una pantalla LCD?
+    // lcd.print("a .- "); //¿Esto es para imprimir en una pantalla LCD?
 
     break;
 
