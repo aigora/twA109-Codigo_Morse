@@ -1,13 +1,12 @@
 /*
-* El circuito consta de un buzzer
-* conectado al pin 13 que como se sabe tiene puesta una 
-* resistencia para controlar el consumo del pin. El buzzer permite
-* oir el sonido de los dot y dash que genere el mensaje que insertemos 
-* por el monitor serial (teclado), para obtener una señal óptica, conectamos 
-* un LED en el mismo pin 13. Para obtener mayor potencia utilizamos un 
-* transistor en la salida.
-* Este código básicamente lo que hace es recibir caracteres por el 
-* puerto COM y los reproduce (luz, sonido o luz + sonido)
+ El circuito consta de una bocina conectada al pin 13 que tiene puesta una 
+ resistencia para controlar el consumo del pin. La bocina permite
+ oír el sonido de los puntos y las rayas que genere el mensaje que introduzcamos 
+ por el monitor serial (teclado), para obtener una señal óptica.
+ Conectamos un LED en el mismo pin 13. Para obtener mayor potencia utilizamos un 
+ transistor en la salida.
+ Este código básicamente lo que hace es recibir caracteres por el 
+ puerto COM y los reproduce (luz, sonido o luz + sonido)
 */
 
 unsigned short int punto = 70; //Duración del punto
@@ -60,9 +59,10 @@ class letra
     void mostrarYsonar();
 };
 
-letra::letra (char car, char* cad, unsigned short int pin) {
+letra::letra (char car, char* cad, unsigned short int pin)
  /* Constructor: cada clase tiene una función especial conocida como constructor,que se usa para crear una instancia de la clase. 
   * El constructor tiene el mismo nombre que la clase y ningún tipo de devolución.*/
+{
   caracter = car;
   codigo = cad;
   ledPin = pin;
@@ -126,15 +126,15 @@ void letra::set (char car, char* cad, unsigned short int pin) // Setter
   delay (letrayletra);
 }*/
 
-void letra::mostrarYsonar () // Hace sonar y enseña el código (ledPin + speakerPin)
+void letra::mostrarYsonar () //Hace sonar y enseña el código (ledPin + speakerPin)
 { 
   unsigned short int j = 0;
   while (codigo[j] != 0)
   {
    if (codigo[j] == '.')
    {
-    playToneLed (440, 100, 9, ledPin); //(frecuencia del tono(Hz) , duración, pin salida, )
-    delay (negro/4); // delay: para el programa por unos segundos 
+    playToneLed (440, 100, 9, ledPin); //(frecuencia del tono(Hz), duración, pin salida, )
+    delay (negro/4); //delay: para el programa por unos segundos 
    }
    else if (codigo[j] == '-')
    {
@@ -155,308 +155,219 @@ void setup()
 int letraIN = 0;
 unsigned short int ledPin = 13;
 
-void loop() {
-
+void loop()
+{
   digitalWrite(ledPin, LOW);
-
-
   letraIN = 0;
-
   letraIN = Serial.read();
-
   letra let (0, "", ledPin);
-
-  switch (letraIN) {
-
+  switch (letraIN)
+  {
    case 'a':
-
    {
-
     let.set ('a', ".-", ledPin);
-
-    // lcd.print("a .- "); //¿Esto es para imprimir en una pantalla LCD?
-
     break;
-
    }
-
    case 'b':
-
    {
-
     let.set ('b', "-...", ledPin)
-
     break;
-
    }
-
    case 'c':
-
    {
-
     let.set ('c', "-.-.", ledPin);
-
-
     break;
-
    }
-
    case 'd':
-
    {
-
     let.set ('d', "-..", ledPin);
-
     break;
-
    }
-
    case 'e':
-
    {
-
     let.set ('e', ".", ledPin);
-
     break;
-
    }
-
    case 'f':
-
    {
-
     let.set ('f', "..-.", ledPin);
-
     break;
-
    }
-
    case 'g':
-
    {
-
     let.set ('g', "--.", ledPin);
-
     break;
-
    }
-
    case 'h':
-
    {
-
     let.set ('h', "....", ledPin);
-
     break;
-
    }
-
    case 'i':
-
    {
-
     let.set ('i', "..", ledPin);
-
     break;
-
    }
-
    case 'j':
-
    {
-
     let.set ('j', ".---", ledPin); 
     break;
    }
-
    case 'k': 
    {
     let.set ('k', "-.-", ledPin);
     break;
    }
-   
    case 'l': 
    {
    let.set ('l', ".-..", ledPin); 
    break;
    }
-
    case 'm':
    {
     let.set ('m', "--", ledPin);
     break;
    }
-   
    case 'n': 
    {
    let.set ('n', "-.", ledPin);
    break;
    }
-
    case 'o': 
    {
    let.set ('o', "---", ledPin);
    break;
    }
-
    case 'p':
    {
    let.set ('p', ".--.", ledPin);
    break;
    }
-
    case 'q':
    {
    let.set ('q', "--.-", ledPin);
    break;
    }
-
    case 'r': 
    {
    let.set ('r', ".-.", ledPin);
    break;
    }
-
    case 's': 
    {
    let.set ('s', "...", ledPin);
    break;
    }
-
    case 't': 
    {
    let.set ('t', "-", ledPin);
    break;
    }
-
    case 'u':
    {
    let.set ('u', "..-", ledPin);
    break;
    }
-
    case 'v': 
    {
    let.set ('v', "...-", ledPin);
    break;
    }
-
    case 'w': 
    {
    let.set ('w', ".--", ledPin);
    break;
    }
-
    case 'x':
    {
    let.set ('x', "-..-", ledPin);
    break;
    }
-
    case 'y':
    {
    let.set ('y', "-.--", ledPin); 
    break;
    }
-
    case 'z':
    {
    let.set ('z', "--..", ledPin);
    break;
    }
-
    case '0': 
    {
    let.set ('0', "-----", ledPin);
    break;
    }
-
    case '1': 
    {
     let.set ('1', ".----", ledPin);
     break;
    }
-   
-
    case '2':
    {
    let.set ('2', "..---", ledPin);
    break;
    }
-
    case '3':
    {
    let.set ('3', "...--", ledPin); 
    break;
    }
-
    case '4': 
    {
    let.set ('4', "....-", ledPin);
    break;
    }
-
    case '5': 
    {
    let.set ('5', ".....", ledPin);
    break;
    }
-
    case '6': 
    {
    let.set ('6', "-....", ledPin);
    break;
    }
-
    case '7':
    {
    let.set ('7', "--...", ledPin);
-   
    break;
    }
-
    case '8': 
    {
    let.set ('8', "---..", ledPin);
    break;
    }
-
    case '9':
    {
    let.set ('9', "----.", ledPin); 
    break;
    }
-
    case '.': 
    {
    let.set ('.', ".-.-.-", ledPin); 
    break;
    }
-
    case ',': 
    {
    let.set (',', "--..--", ledPin);
    break;
    }
-
    case '?': 
    {
    let.set ('?', "..--..", ledPin); 
    break;
    }
-
    case '"':
    {
    let.set ('"', ".-..-.", ledPin);
    break;
    }
-
    case '!':
    {
    let.set ('!', ".-.-.", ledPin); 
    break;
    }
   }
-
    let.mostrarYsonar();
 }
