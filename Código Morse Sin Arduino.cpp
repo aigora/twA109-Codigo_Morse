@@ -82,7 +82,7 @@ int simbolo_ok(char c) //FUNCIÓN PARA DESCARTAR TODOS LOS CARACTERES QUE NO SEAN
 			if (c >= '0' && c <= '9')
 				resultado = 1;
 			else
-				if (c == '.' || c == ',' || c == '?' || c == '"' || c == '!')
+				if (c == '.' || c == ',' || c == '?' || c == '"' || c == '!' || c == ' ')
 					resultado = 1;
 	return resultado;
 }
@@ -304,6 +304,11 @@ void imprimir(char cad[]) //FUNCIÓN PARA IMPRIMIR POR PANTALLA EL CÓDIGO MORSE
 		case '!':
 		{
 			printf(".-.-.  ");
+			break;
+		}
+		case ' ':
+		{
+			printf(" ");
 			break;
 		}
 		}
