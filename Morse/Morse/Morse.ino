@@ -25,8 +25,16 @@ void loop()
                              tone(13,440,200);
                              Estado=1;
                              break;
+                             LEDVerde.Run(200,300);
+                             tone(13,440,200);
+                             Estado=1;
+                             break;
                    case '-': LEDRojo.Run(400,300);
                               tone(13,440,400);
+                             Estado=1;
+                             break;
+                             LEDVerde.Run(200,300);
+                             tone(13,440,200);
                              Estado=1;
                              break;
                }
