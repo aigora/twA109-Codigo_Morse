@@ -27,14 +27,14 @@ int load_tabla(CMorse []);  // Carga la tabla de correspondencias
 
 int main()
 {
-    CMorse Tabla[45];  // Tabla de correspondencias.
+    CMorse Tabla[41];  // Tabla de correspondencias.
     int total=0;
 	char cad[N];
 	char opcion;
     //Arduino SerialPort object
     SerialPort *arduino;
     // Puerto serie en el que está Arduino
-    char* portName = "\\\\.\\COM3";
+    char* portName = "\\\\.\\COM5";
     // Buffer para datos procedentes de Arduino
     char incomingData[MAX_DATA_LENGTH];
   
@@ -44,6 +44,7 @@ int main()
     Crear_Conexion(arduino,portName);
 
     total = load_tabla(Tabla); // Carga la tabla de conversión desde un fichero y devuelve el número de pares.
+
     
 	do {
 		opcion = menu();
@@ -136,7 +137,7 @@ void enviar_mensaje (SerialPort *arduino,char cadena[],int tipo,CMorse Tabla[],i
   for (i=0;cadena[i]!='\0';i++)  // Recorremos cada letra del mensaje
   {
      for (j=0;j<n;j++)   // Buscamos en la tabla su correspondencia
-      if (cadena[i]==Tabla[i].simbolo)
+      if (cadena[i]==Tabla[j].simbolo)
          enviar_arduino (arduino,Tabla[i].secuencia);
   }
 }
@@ -150,11 +151,13 @@ void enviar_arduino (SerialPort *arduino,char secuencia[])
         Sleep(100);
 		Crear_Conexion(arduino, arduino->portName);
 	}
+
+printf ("Enviando: %s",secuencia);
 	for (i=0; secuencia[i]!='\0' && isConnected(arduino); i++)  //Bucle del envío
 		writeSerialPort(arduino, &secuencia[i], sizeof(char)); 
 }
 
-// ESTA FUNCIÓN DEBE LEER UN FICHERO DE TEXTO Y ASOCIAR A CADA Símbolo su secuencia
+//Para leer un fichero de texti y asociar a cada símbolo su secuencia
 int load_tabla(CMorse tabla [])
 {
   int i;
@@ -168,15 +171,15 @@ int load_tabla(CMorse tabla [])
   	  for (i=0; i<41; i++)
   	  {
   	  	fscanf(entrada, "%c", &tabla[i].simbolo);
-  	  	fscanf(entrada, "%s", &tabla[i].secuencia); //Para leer la secuencia
-  	  	strcpy(tabla[i].secuencia,*tabla[i].secuencia); //Tendríamos que copiar lo escaneado en la línea 171
-  	  	fscanf(entrada, "%c", &letra); //Para leer salto de línea  	  	
+  	  	fscanf(entrada, "%s", tabla[i].secuencia); //Para leer la secuencia  
+		fscanf(entrada, "%c", &letra);	  	
+  	  	//printf("%c %s\n", tabla[i].simbolo,tabla[i].secuencia);
 	  }
 	  fclose(entrada);
   }
   //tabla[0].simbolo='a';
   //strcpy (tabla[0].secuencia,".-.-");
-  return 1;
+  return 40;
 }
 
 /*void imprimir(char cad[]) //FUNCIÓN PARA IMPRIMIR POR PANTALLA EL CÓDIGO MORSE 
