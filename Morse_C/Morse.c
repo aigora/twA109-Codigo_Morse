@@ -3,11 +3,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include "SerialPort.h"
+#include "SerialPort.c"
 
 #define N 100
 #define MAX_DATA_LENGTH 255
 
-typedef struct // Esta estructura almacenará la correspondencia entre símbolos y secuencias de puntos y rayas.
+typedef struct //Esta estructura almacenará la correspondencia entre símbolos y secuencias de puntos y rayas.
 {
   char simbolo;
   char secuencia[10];
@@ -18,32 +19,32 @@ char menu(); //FUNCIÓN PARA DISTINGUIR SI ES UN MENSAJE DE SOCORRO O NO.
 void mensaje(char []); //FUNCIÓN PARA INTRODUCIR EL MENSAJE 
 char mayusculas(char); //FUNCION PARA QUE, EN CASO DE UNA MAYÚSCULA, SE CONVIERTA A MINÚSCULA.
 int simbolo_ok(char); //FUNCIÓN PARA DESCARTAR TODOS LOS CARACTERES QUE NO SEAN VÁLIDOS DENTRO DE LA SELECCIÓN
-void imprimir(char *); //FUNCIÓN PARA IMPRIMIR POR PANTALLA EL CÓDIGO MORSE
+//void imprimir(char *); //FUNCIÓN PARA IMPRIMIR POR PANTALLA EL CÓDIGO MORSE
 
 void enviar_mensaje (SerialPort *,char [],int,CMorse [] ,int );  // Prepara un mensaje para ser enviado a Arduino
 void enviar_arduino (SerialPort *,char []); // Envía una cadena de puntos y rayas a Arduino
 
-int load_tabla(CMorse []);  // Carga la tabla de correspondencias
+int load_tabla(CMorse []);  //Carga la tabla de correspondencias
 
 int main()
 {
-    CMorse Tabla[41];  // Tabla de correspondencias.
+    CMorse Tabla[41];  //Tabla de correspondencias.
     int total=0;
 	char cad[N];
 	char opcion;
     //Arduino SerialPort object
     SerialPort *arduino;
-    // Puerto serie en el que está Arduino
+    //Puerto serie en el que está Arduino
     char* portName = "\\\\.\\COM5";
-    // Buffer para datos procedentes de Arduino
+    //Buffer para datos procedentes de Arduino
     char incomingData[MAX_DATA_LENGTH];
   
-    // Crear estructura de datos del puerto serie
+    //Crear estructura de datos del puerto serie
     arduino = (SerialPort *)malloc(sizeof(SerialPort));
-    // Apertura del puerto serie
+    //Apertura del puerto serie
     Crear_Conexion(arduino,portName);
 
-    total = load_tabla(Tabla); // Carga la tabla de conversión desde un fichero y devuelve el número de pares.
+    total = load_tabla(Tabla); //Carga la tabla de conversión desde un fichero y devuelve el número de pares
 
     
 	do {
@@ -51,18 +52,17 @@ int main()
 		switch (opcion)
 		{
 			case 'a': mensaje(cad); //Instrucciones asociadas
-			          printf("Se enciende un LED rojo.\n");
+			          printf("\nSe enciende un LED rojo.\n");
                       //imprimir(cad); //enviar los datos a arduino.
-                      enviar_mensaje(arduino,cad,1,Tabla,total); // Enviamos la cadena a Arduino indicando que es un mensaje normal
+                      enviar_mensaje(arduino,cad,1,Tabla,total); //Enviamos la cadena a Arduino indicando que es un mensaje normal
 					  break;
 			case 'b': mensaje(cad); //Instrucciones asociadas
-			          printf("Se enciende un LED verde.\n");
+			          printf("\nSe enciende un LED verde.\n");
                       //imprimir(cad);
-                      enviar_mensaje(arduino,cad,0,Tabla,total); // Enviamos la cadena a Arduino indicando que es un mensaje normal
+                      enviar_mensaje(arduino,cad,0,Tabla,total); //Enviamos la cadena a Arduino indicando que es un mensaje normal
 					  break;
 		}
-	} while (opcion != '*');
-	
+	} while (opcion != '*');	
 	system("pause");
 	return 0;
 }
@@ -74,7 +74,7 @@ char menu() //FUNCIÓN PARA DISTINGUIR SI ES UN MENSAJE DE SOCORRO O NO.
   {
 	printf("Indique el motivo de su mensaje.\n");
     printf ("Pulse la letra 'a' si es un mensaje de alerta o socorro o la letra 'b' si es cualquier otro tipo de mensaje.\n");
-	printf("\nSi desea salir del programa introduzca '*': ");
+	printf("Si desea salir del programa introduzca '*': ");
 	scanf("%c", &opcion); //scanf_s("%c", &opcion);
     fflush(stdin);
     if (opcion != '*' && opcion != 'a' && opcion != 'b')
@@ -88,7 +88,7 @@ void mensaje (char c[]) //FUNCIÓN PARA INTRODUCIR EL MENSAJE
   int i, resultado;
   do
   {
-    printf("Introduzca su mensaje (puede introducir numeros, espacios, comas, exclamaciones, interrogaciones, comillas o puntos si lo desea): ");
+    printf("\nIntroduzca su mensaje (puede introducir numeros, espacios, comas, exclamaciones, interrogaciones, comillas o puntos si lo desea): ");
     gets(c); // gets_s(c);
 	resultado = 1; //Doy por hecho que todos los caracteres son correctos, que es lo más lógico
 	for (i = 0; c[i] != '\0'; i++)
@@ -123,7 +123,7 @@ int simbolo_ok(char c) //FUNCIÓN PARA DESCARTAR TODOS LOS CARACTERES QUE NO SEAN
 	return resultado;
 }
 
-char mayusculas(char letra) //FUNCION PARA QUE, EN CASO DE UNA MAYÚSCULA, SE CONVIERTA A MINÚSCULA.
+char mayusculas(char letra) //FUNCIÓN PARA QUE, EN CASO DE UNA MAYÚSCULA, SE CONVIERTA A MINÚSCULA.
 {
 	char salida;
 	salida = 'a' + letra - 'A';
@@ -134,10 +134,10 @@ char mayusculas(char letra) //FUNCION PARA QUE, EN CASO DE UNA MAYÚSCULA, SE CON
 void enviar_mensaje (SerialPort *arduino,char cadena[],int tipo,CMorse Tabla[],int n)
 {
   int i,j;
-  for (i=0;cadena[i]!='\0';i++)  // Recorremos cada letra del mensaje
+  for (i = 0; cadena[i] != '\0'; i++)  //Recorremos cada letra del mensaje
   {
-     for (j=0;j<n;j++)   // Buscamos en la tabla su correspondencia
-      if (cadena[i]==Tabla[j].simbolo)
+     for (j = 0; j < n; j++)   //Buscamos en la tabla su correspondencia
+      if (cadena[i] == Tabla[j].simbolo)
          enviar_arduino (arduino,Tabla[i].secuencia);
   }
 }
@@ -152,12 +152,12 @@ void enviar_arduino (SerialPort *arduino,char secuencia[])
 		Crear_Conexion(arduino, arduino->portName);
 	}
 
-printf ("Enviando: %s",secuencia);
+printf ("Enviando: %s\n",secuencia);
 	for (i=0; secuencia[i]!='\0' && isConnected(arduino); i++)  //Bucle del envío
 		writeSerialPort(arduino, &secuencia[i], sizeof(char)); 
 }
 
-//Para leer un fichero de texti y asociar a cada símbolo su secuencia
+//Para leer un fichero de texto y asociar a cada símbolo su secuencia
 int load_tabla(CMorse tabla [])
 {
   int i;
@@ -173,12 +173,9 @@ int load_tabla(CMorse tabla [])
   	  	fscanf(entrada, "%c", &tabla[i].simbolo);
   	  	fscanf(entrada, "%s", tabla[i].secuencia); //Para leer la secuencia  
 		fscanf(entrada, "%c", &letra);	  	
-  	  	//printf("%c %s\n", tabla[i].simbolo,tabla[i].secuencia);
 	  }
 	  fclose(entrada);
   }
-  //tabla[0].simbolo='a';
-  //strcpy (tabla[0].secuencia,".-.-");
   return 40;
 }
 
