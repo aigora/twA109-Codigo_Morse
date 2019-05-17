@@ -18,6 +18,7 @@ void LED::Run(int t_on,int t_off)
   inicio=millis();
   Estado=1;
 }
+
 int LED::Update()
 {
   if (Estado==1 && millis()-inicio>Tiempo_On)

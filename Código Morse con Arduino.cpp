@@ -24,7 +24,7 @@ int main()
 		{
 			case 'a': mensaje(cad); //Instrucciones asociadas
 			          printf("Se enciende un LED rojo.\n");
-                      imprimir(cad);
+                      imprimir(cad); //enviar los datos a arduino.
 					  break;
 			case 'b': mensaje(cad); //Instrucciones asociadas
 			          printf("Se enciende un LED verde.\n");
@@ -95,7 +95,7 @@ int simbolo_ok(char c) //FUNCIÓN PARA DESCARTAR TODOS LOS CARACTERES QUE NO SEAN
 			if (c >= '0' && c <= '9')
 				resultado = 1;
 			else
-				if (c == '.' || c == ',' || c == '?' || c == '"' || c == '!')
+				if (c == '.' || c == ',' || c == '?' || c == '"' || c == '!' || c == ' ')
 					resultado = 1;
 	return resultado;
 }
@@ -319,6 +319,11 @@ void imprimir(char cad[]) //FUNCIÓN PARA IMPRIMIR POR PANTALLA EL CÓDIGO MORSE
 		  printf(".-.-.  ");
 		  break;
 	  }
+	  case ' ':
+	  {
+		  printf(" ");
+		  break;
+	  }
 	  }
   }
 }
@@ -333,8 +338,8 @@ void autoConnect(SerialPort *arduino, char *incomingData)
 	}
 	if (isConnected(arduino)) //Comprueba si Arduino está conectado
 		printf("Conectado con Arduino en el puerto %s\n", arduino->portName);
-	printf("0 - LED OFF, 1 - LED ON, 9 - SALIR");
-	while (isConnected(arduino) && sendData != '9') //Bucle de la aplicación
+	printf("0 - LED OFF, 1 - LED ON, * - SALIR");
+	while (isConnected(arduino) && sendData != '*') //Bucle de la aplicación
 	{
 		sendData = getch();
 		writeSerialPort(arduino, &sendData, sizeof(char));
